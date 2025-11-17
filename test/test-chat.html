@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat Marmitaria - Interface de Teste</title>
+    <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="config-warning" id="configWarning">
+            ⚠️ ATENÇÃO: Configure a URL do webhook no código
+        </div>
+
+        <div class="header">
+            <h2>🍱 Marmitaria Sabor Caseiro</h2>
+            <p>Atendimento inteligente via IA</p>
+        </div>
+
+        <div id="messages"></div>
+        <div class="loading" id="loading">Digitando</div>
+
+        <div class="input-area">
+            <input
+                type="text"
+                id="messageInput"
+                placeholder="Digite sua mensagem..."
+                autocomplete="off"
+            >
+            <button onclick="sendMessage()" id="sendBtn">Enviar</button>
+        </div>
+    </div>
+
+    <script>
+        const WEBHOOK_URL = 'https://nexttech-n8n-nexthub.haas2a.easypanel.host/webhook/marmitaria-chat';
+        const SESSION_ID = 'web-' + Date.now();
+        let NOME = '';
+        let conversationStarted = false;
+
+        if (WEBHOOK_URL.includes('SEU_N8N')) {
+            document.getElementById('configWarning').classList.add('show');
+        }
+
+        function addMessage(text, type = 'bot') {
+            const messagesDiv = document.getElementById('messages');
+            const div = document.createElement('div');
+            div.className = 'message ' + type;
+            const safeText = text || '';
+            div.innerHTML = safeText.replace(/\n/g, '<br>');
+            messagesDiv.appendChild(div);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        }
+
+        function showLoading(show) {
+            const loading = document.getElementById('loading');
+            const sendBtn = document.getElementById('sendBtn');
+            const input = document.getElementById('messageInput');
+
+            loading.classList.toggle('show', show);
+            sendBtn.disabled = show;
+            input.disabled = show;
+        }
+
+        async function sendMessage() {
+            const input = document.getElementById('messageInput');
+            const message = input.value.trim();
+
+            if (!message) return;
+
+            if (!conversationStarted) {
+                NOME = message;
+                conversationStarted = true;
+                addMessage(message, 'user');
+                input.value = '';
+                setTimeout(() => {
+                    addMessage(`Olá, ${NOME}! Que bom ter você aqui na Marmitaria Sabor Caseiro. 😊\n\nComo posso te ajudar hoje?\n\n📋 Ver o cardápio completo\n🍱 Fazer um pedido\n💬 Tirar dúvidas`, 'bot');
+                }, 600);
+                return;
+            }
+
+            addMessage(message, 'user');
+            input.value = '';
+            showLoading(true);
+
+            try {
+                const response = await fetch(WEBHOOK_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        message: message,
+                        nome: NOME,
+                        session_id: SESSION_ID
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+
+                const data = await response.json();
+                showLoading(false);
+
+                const mensagem = data.mensagem || '';
+                if (mensagem) {
+                    addMessage(mensagem, 'bot');
+                }
+
+            } catch (error) {
+                showLoading(false);
+                let errorMsg = '❌ Erro ao enviar mensagem.\n\n';
+
+                if (WEBHOOK_URL.includes('SEU_N8N')) {
+                    errorMsg += '⚠️ Configure a URL do webhook no código!';
+                } else if (error.message.includes('Failed to fetch')) {
+                    errorMsg += '🔌 Não foi possível conectar ao servidor.\n\nVerifique:\n• URL do webhook\n• Workflow ativo\n• CORS configurado';
+                } else {
+                    errorMsg += `Detalhes: ${error.message}`;
+                }
+
+                addMessage(errorMsg, 'system error');
+            }
+        }
+
+        document.getElementById('messageInput').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                sendMessage();
+            }
+        });
+
+        window.addEventListener('load', () => {
+            addMessage('Olá! Seja bem-vindo(a) à Marmitaria Sabor Caseiro! 👋', 'bot');
+            setTimeout(() => {
+                addMessage('Eu sou o assistente virtual e vou te ajudar a fazer seu pedido.\n\nPara começar, qual é o seu nome?', 'bot');
+            }, 800);
+            document.getElementById('messageInput').focus();
+        });
+
+        window.addEventListener('beforeunload', (e) => {
+            if (conversationStarted && NOME) {
+                e.preventDefault();
+                e.returnValue = '';
+            }
+        });
+    </script>
+</body>
+</html>

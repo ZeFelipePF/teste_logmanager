@@ -1,0 +1,629 @@
+{
+  "name": "resolução_jose_felipe",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "marmitaria-chat",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "204a6b28-f7b2-438e-b186-0efe047d8f19",
+      "name": "Webhook - Chat Público",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1.1,
+      "position": [
+        1920,
+        800
+      ],
+      "webhookId": "marmitaria-chat"
+    },
+    {
+      "parameters": {
+        "jsCode": "// ============================================================\n// CÓDIGO CORRIGIDO PARA O NÓ \"Preparar Contexto IA\"\n// ============================================================\n// COPIE ESTE CÓDIGO E COLE NO NÓ CODE \"Preparar Contexto IA\"\n// ============================================================\n\n// PROMPT DO SISTEMA - Contexto completo para o agente\nconst systemPrompt = `Você é um atendente virtual inteligente da \"Marmitaria Sabor Caseiro\".\nSeu objetivo é ajudar clientes a fazer pedidos de marmitas de forma natural, amigável e eficiente.\n\n═══════════════════════════════════════════════════════\n                    CARDÁPIO DISPONÍVEL\n═══════════════════════════════════════════════════════\n\n1. 🍖 Marmita Tradicional - R$ 18,00\n   Arroz branco, feijão preto, bife acebolado, batata frita, salada (alface e tomate)\n\n2. 🍗 Marmita Frango - R$ 16,00\n   Arroz branco, feijão carioca, filé de frango grelhado, farofa, salada\n\n3. 💪 Marmita Fitness - R$ 20,00\n   Arroz integral, feijão preto, frango grelhado, batata doce, brócolis no vapor\n\n4. 🌱 Marmita Vegana - R$ 17,00\n   Arroz integral, feijão preto, PTS (proteína de soja), legumes refogados, salada\n\n5. 👔 Marmita Executiva - R$ 22,00\n   Arroz branco, feijão preto, picanha acebolada, purê de batatas, vinagrete\n\n6. 🐟 Marmita Peixe - R$ 19,00\n   Arroz branco, pirão, filé de peixe grelhado, batata cozida, salada\n\n7. 👶 Marmita Kids - R$ 14,00\n   Arroz branco, feijão carioca, nuggets de frango, batata frita\n\n8. 🍝 Marmita Strogonoff - R$ 21,00\n   Arroz branco, strogonoff de frango, batata palha\n\n═══════════════════════════════════════════════════════\n              PERSONALIZAÇÕES DISPONÍVEIS\n═══════════════════════════════════════════════════════\n\n✅ TROCAS SEM CUSTO:\n  • Arroz branco → arroz integral ou macarrão\n  • Feijão preto → feijão carioca\n  • Remover qualquer item (ex: sem salada, sem batata)\n  • Trocar acompanhamentos similares\n\n💰 ADICIONAIS COM CUSTO:\n  • Ovo frito: +R$ 2,00\n  • Bacon: +R$ 3,00\n  • Salada extra: +R$ 2,00\n  • Porção extra de proteína: +R$ 5,00\n\n═══════════════════════════════════════════════════════\n                 FLUXO DE ATENDIMENTO\n═══════════════════════════════════════════════════════\n\nIMPORTANTE: Você já conhece o nome do cliente (vem no contexto).\nNÃO cumprimente novamente, vá DIRETO para o atendimento!\n\n1️⃣ APRESENTAÇÃO DO CARDÁPIO\n   - Mostre as opções de forma atrativa e concisa\n   - Identifique preferências (fitness, vegano, etc)\n\n2️⃣ ESCOLHA DO PRATO\n   - Ajude na escolha baseado nas preferências\n   - Explique ingredientes se perguntado\n\n3️⃣ PERSONALIZAÇÕES\n   - Pergunte se deseja alguma alteração\n   - Calcule os valores adicionais corretamente\n\n4️⃣ CONFIRMAÇÃO\n   - Liste TODOS os itens escolhidos\n   - Mostre TODAS as personalizações\n   - Exiba o VALOR TOTAL calculado\n   - Peça confirmação explícita\n\n5️⃣ FINALIZAÇÃO\n   - Agradeça e informe que o pedido foi registrado\n\n═══════════════════════════════════════════════════════\n                  REGRAS IMPORTANTES\n═══════════════════════════════════════════════════════\n\n✓ Seja sempre simpático, prestativo e natural\n✓ Entenda intenções mesmo com erros de digitação\n✓ Use linguagem coloquial e amigável\n✓ Aceite personalizações razoáveis\n✓ CALCULE o valor total CORRETAMENTE somando adicionais\n✓ Use emojis moderadamente (1-2 por mensagem)\n✓ NÃO invente itens que não estão no cardápio\n✓ NÃO finalize o pedido sem confirmação explícita do cliente\n\n═══════════════════════════════════════════════════════\n        FORMATO CRÍTICO - PEDIDO CONFIRMADO\n═══════════════════════════════════════════════════════\n\nQuando o cliente CONFIRMAR o pedido explicitamente\n(dizendo: \"sim\", \"confirmo\", \"pode fazer\", \"tá bom\", \"ok\", etc),\nvocê DEVE incluir no FINAL da sua resposta este bloco:\n\n---PEDIDO_CONFIRMADO---\n{\n  \"itens\": [\"Nome da Marmita 1\", \"Nome da Marmita 2\"],\n  \"personalizacoes\": [\"Trocar arroz por macarrão\", \"Adicionar ovo frito\"],\n  \"valor_total\": \"20.00\",\n  \"status\": \"confirmado\"\n}\n---FIM_PEDIDO---\n\nIMPORTANTE:\n- Use APENAS números com ponto decimal no valor_total (ex: \"22.00\")\n- Liste TODAS as marmitas em \"itens\" (array)\n- Liste TODAS as personalizações em \"personalizacoes\" (array)\n- Se não houver personalizações, use array vazio: []\n- NÃO adicione este bloco se o cliente NÃO confirmou\n\n═══════════════════════════════════════════════════════\n\nAgora atenda o cliente de forma profissional e amigável!`;\n\n// ============================================================\n// CORREÇÃO: Pegar dados do WEBHOOK (vem do body da requisição)\n// ============================================================\n\n// Os dados vêm do webhook no formato: $json.body\nconst body = $json.body || $json;\n\n// Extrair com fallbacks seguros\nconst sessionId = body.session_id || 'session-' + Date.now();\nconst userMessage = body.message || '';\nconst clienteNome = body.nome || 'Cliente';\n\n// Debug: ver o que está chegando\nconsole.log('Dados recebidos:', { sessionId, userMessage, clienteNome });\n\n// Retornar dados estruturados para o próximo nó\nreturn {\n  session_id: sessionId,\n  cliente_nome: clienteNome,\n  user_message: userMessage,\n  system_prompt: systemPrompt\n};\n"
+      },
+      "id": "0d48aaec-36c5-47ac-ac31-a52c2bd9d88f",
+      "name": "Preparar Contexto IA",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2256,
+        800
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const respostaCompleta = $input.first().json.propertyName;\n\nconsole.log('Resposta encontrada:', respostaCompleta);\n\nconst sessionId = $('Preparar Contexto IA').first().json.session_id;\nconst clienteNome = $('Preparar Contexto IA').first().json.cliente_nome;\nconst userMessage = $('Preparar Contexto IA').first().json.user_message;\n\nconsole.log('Dados da sessão:', { sessionId, clienteNome, userMessage });\n\n// Verificar se há confirmação de pedido\nconst temConfirmacao = $('Pedido Confirmado?').first().json.text;\n\nlet dadosPedido = {\n  pedido: $input.first().json.output.prato_escolhido,\n  itens_pedido: $input.first().json.output.ingredientes.join(\", \"),\n  valor_total: $input.first().json.output.valor_total,\n  data_hora: $now.setZone(\"America/Sao_Paulo\"),\n  status: 'pedido_realizado'\n};\n\nreturn {\n  session_id: sessionId,\n  cliente_nome: clienteNome,\n  resposta_completa: respostaCompleta,\n\n  // Status do pedido\n  pedido_confirmado: temConfirmacao,\n\n  // Dados do pedido\n  pedido: dadosPedido.pedido,\n  itens_pedido: dadosPedido.itens_pedido,\n  valor_total: dadosPedido.valor_total,\n  data_hora: dadosPedido.data_hora,\n  status: dadosPedido.status,\n};\n"
+      },
+      "id": "79cbfddc-1000-423f-937b-0b1575127b91",
+      "name": "Processar Resposta IA",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        4752,
+        688
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 1
+          },
+          "conditions": [
+            {
+              "id": "condition-pedido-confirmado",
+              "leftValue": "={{ $('Preparar Contexto IA').item.json.user_message.toLowerCase() }}",
+              "rightValue": "confirmar pedido",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "18027b2e-81cd-43f7-982f-3fb0180e0f7e",
+      "name": "Pedido Confirmado?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        3376,
+        800
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "17Wi1MYK-T56cmmWYRqxU6Yq03Ysszn51MSJwTZ7Lka8",
+          "mode": "list",
+          "cachedResultName": "Teste",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/17Wi1MYK-T56cmmWYRqxU6Yq03Ysszn51MSJwTZ7Lka8/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Página1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/17Wi1MYK-T56cmmWYRqxU6Yq03Ysszn51MSJwTZ7Lka8/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Data/Hora": "={{ $json.data_hora }}",
+            "Session ID": "={{ $json.session_id }}",
+            "Nome Cliente": "={{ $json.cliente_nome }}",
+            "Valor Total": "={{ $json.valor_total }}",
+            "Status": "={{ $json.status }}",
+            "Pedido": "={{ $json.pedido }}",
+            "Itens do pedido": "={{ $json.itens_pedido }}"
+          },
+          "matchingColumns": [
+            "Session ID"
+          ],
+          "schema": [
+            {
+              "id": "Data/Hora",
+              "displayName": "Data/Hora",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Session ID",
+              "displayName": "Session ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Nome Cliente",
+              "displayName": "Nome Cliente",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Pedido",
+              "displayName": "Pedido",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Itens do pedido",
+              "displayName": "Itens do pedido",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Valor Total",
+              "displayName": "Valor Total",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "id": "6a74d2a5-b255-498e-8518-cead45612a8b",
+      "name": "Registrar Pedido - Google Sheets",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.4,
+      "position": [
+        4928,
+        688
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "nndpHqpvsoHker5W",
+          "name": "Google Sheets - Next account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.cliente_nome + ': ' + $json.user_message }}",
+        "options": {
+          "systemMessage": "=Você é um atendente virtual inteligente da \"Marmitaria Sabor Caseiro\". \nSeu objetivo é ajudar clientes a fazer pedidos de marmitas de forma natural, amigável e eficiente.\n\n⚠️ REGRA CRÍTICA: O cliente JÁ foi cumprimentado! NÃO cumprimente novamente.\nVá DIRETO ao ponto respondendo à mensagem dele.\n\n═══════════════════════════════════════════════════════\n                    CARDÁPIO DISPONÍVEL\n═══════════════════════════════════════════════════════\n\n1. 🍖 Marmita Tradicional - R$ 18,00\n   Arroz branco, feijão preto, bife acebolado, batata frita, salada (alface e tomate)\n\n2. 🍗 Marmita Frango - R$ 16,00\n   Arroz branco, feijão carioca, filé de frango grelhado, farofa, salada\n\n3. 💪 Marmita Fitness - R$ 20,00\n   Arroz integral, feijão preto, frango grelhado, batata doce, brócolis no vapor\n\n4. 🌱 Marmita Vegana - R$ 17,00\n   Arroz integral, feijão preto, PTS (proteína de soja), legumes refogados, salada\n\n5. 👔 Marmita Executiva - R$ 22,00\n   Arroz branco, feijão preto, picanha acebolada, purê de batatas, vinagrete\n\n6. 🐟 Marmita Peixe - R$ 19,00\n   Arroz branco, pirão, filé de peixe grelhado, batata cozida, salada\n\n7. 👶 Marmita Kids - R$ 14,00\n   Arroz branco, feijão carioca, nuggets de frango, batata frita\n\n8. 🍝 Marmita Strogonoff - R$ 21,00\n   Arroz branco, strogonoff de frango, batata palha\n\n═══════════════════════════════════════════════════════\n              PERSONALIZAÇÕES DISPONÍVEIS\n═══════════════════════════════════════════════════════\n\n✅ TROCAS SEM CUSTO:\n  • Arroz branco → arroz integral ou macarrão\n  • Feijão preto → feijão carioca\n  • Remover qualquer item (ex: sem salada, sem batata)\n  • Trocar acompanhamentos similares\n\n💰 ADICIONAIS COM CUSTO:\n  • Ovo frito: +R$ 2,00\n  • Bacon: +R$ 3,00  \n  • Salada extra: +R$ 2,00\n  • Porção extra de proteína: +R$ 5,00\n\n═══════════════════════════════════════════════════════\n                 FLUXO DE ATENDIMENTO\n═══════════════════════════════════════════════════════\n\nIMPORTANTE: Você já conhece o nome do cliente (vem no contexto).\nNÃO cumprimente novamente, vá DIRETO para o atendimento!\n\n1️⃣ APRESENTAÇÃO DO CARDÁPIO\n   - Mostre as opções de forma atrativa e concisa\n   - Identifique preferências (fitness, vegano, etc)\n\n2️⃣ ESCOLHA DO PRATO\n   - Ajude na escolha baseado nas preferências\n   - Explique ingredientes se perguntado\n\n3️⃣ PERSONALIZAÇÕES\n   - Pergunte se deseja alguma alteração\n   - Calcule os valores adicionais corretamente\n\n4️⃣ CONFIRMAÇÃO\n   - Liste TODOS os itens escolhidos\n   - Mostre TODAS as personalizações\n   - Exiba o VALOR TOTAL calculado\n   - **Peça confirmação explícita com a frase: \"Digite 'Confirmar pedido' para confirmar.\"**\n\n5️⃣ FINALIZAÇÃO\n   - Agradeça e informe que o pedido foi registrado\n\n═══════════════════════════════════════════════════════\n                  REGRAS IMPORTANTES\n═══════════════════════════════════════════════════════\n\n✓ Seja sempre simpático, prestativo e natural\n✓ Entenda intenções mesmo com erros de digitação\n✓ Use linguagem coloquial e amigável\n✓ Aceite personalizações razoáveis\n✓ CALCULE o valor total CORRETAMENTE somando adicionais\n✓ Use emojis moderadamente (1-2 por mensagem)\n✓ NÃO invente itens que não estão no cardápio\n✓ NÃO finalize o pedido sem confirmação explícita do cliente\n✓ **SEMPRE termine a etapa de confirmação com: \"Digite 'Confirmar pedido' para confirmar.\"**\n\n═══════════════════════════════════════════════════════\n                   EXEMPLOS DE USO\n═══════════════════════════════════════════════════════\n\nEXEMPLO 1 - Primeira mensagem (cardápio):\nCliente: \"Ver o cardápio completo\"\nVocê: \"Vou te mostrar nosso cardápio fresquinho, com opções deliciosas para todos os gostos:\n\n🍽️ **CARDÁPIO COMPLETO**\n\n1. 🍖 Marmita Tradicional - R$ 18,00\n2. 🍗 Marmita Frango - R$ 16,00\n3. 💪 Marmita Fitness - R$ 20,00\n4. 🌱 Marmita Vegana - R$ 17,00\n5. 👔 Marmita Executiva - R$ 22,00\n6. 🐟 Marmita Peixe - R$ 19,00\n7. 👶 Marmita Kids - R$ 14,00\n8. 🍝 Marmita Strogonoff - R$ 21,00\n\nQual te chamou mais atenção?\"\n\nEXEMPLO 2 - Com personalização:\nCliente: \"Quero a tradicional com ovo\"\nVocê: \"Perfeito! Então ficou:\n\n🍱 Marmita Tradicional: R$ 18,00\n➕ Ovo frito: R$ 2,00\n\n💰 Total: R$ 20,00\n\nDigite 'Confirmar pedido' para confirmar. ✅\"\n\nEXEMPLO 3 - Com personalização e remoção:\nCliente: \"Marmita Kids sem batata frita e com salada extra\"\nVocê: \"Entendi! Para a sua Marmita Kids, vamos retirar a batata frita e adicionar uma salada extra. 👍\n\nA sua marmita ficará assim:\n- Arroz branco\n- Feijão carioca\n- Nuggets de frango\n- Salada extra\n\nO total agora será de R$ 14,00 (Marmita Kids) + R$ 2,00 (salada extra) = R$ 16,00.\n\nDigite 'Confirmar pedido' para confirmar. 🥗🍗\"\n\nEXEMPLO 4 - Confirmação:\nCliente: \"Confirmar pedido\"\nVocê: \"Pedido confirmado! 🎉 Seu pedido foi registrado com sucesso. \nObrigado e bom apetite!\"\n\n═══════════════════════════════════════════════════════\n\nAgora atenda o cliente de forma profissional e amigável!"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.1,
+      "position": [
+        2736,
+        800
+      ],
+      "id": "b7b83ed1-8f98-48aa-8f10-5f90c6453e88",
+      "name": "AI Agent1"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-3.5-turbo",
+          "mode": "list",
+          "cachedResultName": "gpt-3.5-turbo"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        3392,
+        1104
+      ],
+      "id": "49ce9653-bb9d-4249-9ab9-5dc28a478165",
+      "name": "OpenAI Chat Model1",
+      "credentials": {
+        "openAiApi": {
+          "id": "SqJpPFSM2PGH9VvE",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $('Webhook - Chat Público').item.json.body.session_id }}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        3536,
+        1104
+      ],
+      "id": "6deb0286-b441-4602-a096-aa4fcafc799e",
+      "name": "Simple Memory1"
+    },
+    {
+      "parameters": {
+        "operation": "delete",
+        "key": "={{ $('Webhook - Chat Público').item.json.body.session_id }}"
+      },
+      "type": "n8n-nodes-base.redis",
+      "typeVersion": 1,
+      "position": [
+        4032,
+        960
+      ],
+      "id": "141eb7c5-33c7-41ef-a581-e8e01bd7a19e",
+      "name": "Redis",
+      "credentials": {
+        "redis": {
+          "id": "RTPS2Uy1yeRkZPp7",
+          "name": "Redis account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "key": "={{ $('Preparar Contexto IA').item.json.session_id }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.redis",
+      "typeVersion": 1,
+      "position": [
+        4160,
+        688
+      ],
+      "id": "27e62768-74ea-4d23-b591-874607306b35",
+      "name": "Redis1",
+      "credentials": {
+        "redis": {
+          "id": "RTPS2Uy1yeRkZPp7",
+          "name": "Redis account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "set",
+        "key": "={{ $('Preparar Contexto IA').item.json.session_id }}",
+        "value": "={{ $('AI Agent1').item.json.output }}"
+      },
+      "type": "n8n-nodes-base.redis",
+      "typeVersion": 1,
+      "position": [
+        4384,
+        960
+      ],
+      "id": "f49c6fa2-6641-4b96-94f7-a3b95b0c99d3",
+      "name": "Redis2",
+      "credentials": {
+        "redis": {
+          "id": "RTPS2Uy1yeRkZPp7",
+          "name": "Redis account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "delete",
+        "key": "={{ $('Preparar Contexto IA').item.json.session_id }}"
+      },
+      "type": "n8n-nodes-base.redis",
+      "typeVersion": 1,
+      "position": [
+        5120,
+        688
+      ],
+      "id": "3a5e9159-41f9-433d-82a2-d626a640c7d0",
+      "name": "Redis3",
+      "credentials": {
+        "redis": {
+          "id": "RTPS2Uy1yeRkZPp7",
+          "name": "Redis account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ {\n  \"session_id\": $('Preparar Contexto IA').item.json.session_id,\n  \"mensagem\": $('AI Agent1').item.json.output,\n  \"pedido_confirmado\": $('Pedido Confirmado?').item.json.pedido_confirmado,\n  \"dados_pedido\": $json.pedido_confirmado ? {\n    \"itens\": $json.itens_pedido,\n    \"personalizacoes\": $json.personalizacoes,\n    \"valor_total\": $json.valor_total\n  } : null\n} }}",
+        "options": {
+          "responseHeaders": {
+            "entries": [
+              {
+                "name": "Access-Control-Allow-Origin",
+                "value": "*"
+              },
+              {
+                "name": "Access-Control-Allow-Methods",
+                "value": "POST, OPTIONS"
+              },
+              {
+                "name": "Access-Control-Allow-Headers",
+                "value": "Content-Type"
+              }
+            ]
+          }
+        }
+      },
+      "id": "fdc8fa42-a326-493b-b722-be089895d4f1",
+      "name": "Responder ao Cliente",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        5424,
+        944
+      ]
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.propertyName }}",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "=Você é um assistente especializado em análise de pedidos de restaurante.\nIMPORTANTE: Você DEVE responder APENAS com um JSON válido, sem texto adicional, sem explicações, sem markdown.\nAnalise o pedido e retorne EXATAMENTE neste formato:\n{\n  \"prato_escolhido\": \"nome do prato\",\n  \"valor_prato\": \"R$ 00,00\",\n  \"ingredientes\": [\n    \"ingrediente 1\",\n    \"ingrediente 2\",\n    \"ingrediente 3\"\n  ],\n  \"valor_total\": \"R$ 00,00\"\n}\nREGRAS CRÍTICAS:\n- NUNCA adicione texto antes ou depois do JSON\n- NUNCA use ```json ou ``` no início ou fim\n- Liste TODOS os ingredientes finais do prato em \"ingredientes\" (considerando remoções e adições solicitadas pelo cliente)\n- Se o cliente removeu algo, NÃO inclua na lista de ingredientes\n- Se o cliente adicionou algo, INCLUA na lista de ingredientes\n- SEMPRE retorne um JSON válido e completo\n- NÃO use aspas simples, apenas aspas duplas\n- \"ingredientes\" DEVE ser um array de strings\nRESPONDA APENAS COM O JSON, NADA MAIS."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.1,
+      "position": [
+        4352,
+        688
+      ],
+      "id": "c880ecdb-7c42-4800-a14f-ad22cd368003",
+      "name": "AI Agent",
+      "retryOnFail": true,
+      "maxTries": 5
+    },
+    {
+      "parameters": {
+        "schemaType": "manual",
+        "inputSchema": "{\n  \"type\": \"object\",\n  \"properties\": {\n    \"prato_escolhido\": {\n      \"type\": \"string\",\n      \"description\": \"Nome do prato principal\"\n    },\n    \"valor_prato\": {\n      \"type\": \"string\",\n      \"description\": \"Valor do prato principal\"\n    },\n    \"ingredientes\": {\n      \"type\": \"array\",\n      \"description\": \"Lista completa de ingredientes do prato final (após personalizações)\",\n      \"items\": {\n        \"type\": \"string\",\n        \"description\": \"Nome do ingrediente\"\n      }\n    },\n    \"valor_total\": {\n      \"type\": \"string\",\n      \"description\": \"Valor total do pedido\"\n    }\n  },\n  \"required\": [\"prato_escolhido\", \"valor_prato\", \"ingredientes\", \"valor_total\"]\n}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        4560,
+        864
+      ],
+      "id": "2a5b41e1-bf60-405d-b28a-d5088edcb0da",
+      "name": "Structured Output Parser"
+    }
+  ],
+  "pinData": {
+    "Webhook - Chat Público": [
+      {
+        "json": {
+          "headers": {
+            "host": "nexttech-n8n-nexthub.haas2a.easypanel.host",
+            "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 OPR/122.0.0.0",
+            "content-length": "85",
+            "accept": "*/*",
+            "accept-encoding": "gzip, deflate, br, zstd",
+            "accept-language": "pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7,es;q=0.6,pt-PT;q=0.5,pl;q=0.4",
+            "content-type": "application/json",
+            "origin": "http://127.0.0.1:5500",
+            "priority": "u=1, i",
+            "referer": "http://127.0.0.1:5500/",
+            "sec-ch-ua": "\"Not)A;Brand\";v=\"8\", \"Chromium\";v=\"138\", \"Opera GX\";v=\"122\"",
+            "sec-ch-ua-mobile": "?0",
+            "sec-ch-ua-platform": "\"Windows\"",
+            "sec-fetch-dest": "empty",
+            "sec-fetch-mode": "cors",
+            "sec-fetch-site": "cross-site",
+            "x-forwarded-for": "143.255.217.77",
+            "x-forwarded-host": "nexttech-n8n-nexthub.haas2a.easypanel.host",
+            "x-forwarded-port": "443",
+            "x-forwarded-proto": "https",
+            "x-forwarded-server": "f38eca55d40b",
+            "x-real-ip": "143.255.217.77"
+          },
+          "params": {},
+          "query": {},
+          "body": {
+            "message": "confirmar pedido",
+            "nome": "José Felipe",
+            "session_id": "web-1763304043098"
+          },
+          "webhookUrl": "https://nexttech-n8n-nexthub.haas2a.easypanel.host/webhook/marmitaria-chat",
+          "executionMode": "production"
+        }
+      }
+    ]
+  },
+  "connections": {
+    "Webhook - Chat Público": {
+      "main": [
+        [
+          {
+            "node": "Preparar Contexto IA",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Preparar Contexto IA": {
+      "main": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Processar Resposta IA": {
+      "main": [
+        [
+          {
+            "node": "Registrar Pedido - Google Sheets",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Pedido Confirmado?": {
+      "main": [
+        [
+          {
+            "node": "Redis1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Redis",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Registrar Pedido - Google Sheets": {
+      "main": [
+        [
+          {
+            "node": "Redis3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent1": {
+      "main": [
+        [
+          {
+            "node": "Pedido Confirmado?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "ai_languageModel",
+            "index": 0
+          },
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory1": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "ai_memory",
+            "index": 0
+          },
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Redis": {
+      "main": [
+        [
+          {
+            "node": "Redis2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Redis1": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Redis2": {
+      "main": [
+        [
+          {
+            "node": "Responder ao Cliente",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Redis3": {
+      "main": [
+        [
+          {
+            "node": "Responder ao Cliente",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Processar Resposta IA",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "ab72e039-ceec-40b5-a6f6-905576a71655",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "f89bb3762f2fabf050f48e782adfcc0e1ccdff5e203007e79f7365afc8b05ddb"
+  },
+  "id": "iPoADWoewALpDKKW",
+  "tags": []
+}
