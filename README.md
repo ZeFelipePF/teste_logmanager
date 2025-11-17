@@ -109,7 +109,7 @@ Interface web simples e intuitiva que permite:
 
 ## Registro de Pedidos
 
-Cada pedido confirmado é salvo no Google Sheets com os seguintes campos:
+Cada pedido confirmado é salvo automaticamente no **Google Sheets** com os seguintes campos:
 
 | Campo | Descrição |
 |-------|-----------|
@@ -120,6 +120,10 @@ Cada pedido confirmado é salvo no Google Sheets com os seguintes campos:
 | Itens do pedido | Lista completa de ingredientes finais |
 | Valor Total | Valor total calculado |
 | Status | Status do pedido (confirmado) |
+
+**Acesse a planilha em tempo real:** [Ver Pedidos Registrados](https://docs.google.com/spreadsheets/d/17Wi1MYK-T56cmmWYRqxU6Yq03Ysszn51MSJwTZ7Lka8/edit?usp=sharing)
+
+Todos os pedidos confirmados através do chat aparecem automaticamente na planilha, permitindo acompanhamento em tempo real.
 
 ## Como Testar
 
@@ -246,6 +250,8 @@ O workflow utiliza um segundo AI Agent com **Structured Output Parser** para ext
 **🚀 Chat Online:** https://teste-logmanager.vercel.app/test/test-chat.html
 
 **📦 Repositório GitHub:** https://github.com/ZeFelipePF/teste_logmanager
+
+**📊 Planilha de Pedidos (Google Sheets):** https://docs.google.com/spreadsheets/d/17Wi1MYK-T56cmmWYRqxU6Yq03Ysszn51MSJwTZ7Lka8/edit?usp=sharing
 
 **🔗 Webhook N8N:** `https://nexttech-n8n-nexthub.haas2a.easypanel.host/webhook/marmitaria-chat`
 

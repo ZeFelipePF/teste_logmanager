@@ -4,6 +4,8 @@
 
 **Link direto para teste:** https://teste-logmanager.vercel.app/test/test-chat.html
 
+**Planilha de Pedidos:** https://docs.google.com/spreadsheets/d/17Wi1MYK-T56cmmWYRqxU6Yq03Ysszn51MSJwTZ7Lka8/edit?usp=sharing
+
 ### Alternativa: Acesso Local
 
 1. Abra o arquivo `test/test-chat.html` em qualquer navegador moderno (Chrome, Firefox, Edge, Safari)
