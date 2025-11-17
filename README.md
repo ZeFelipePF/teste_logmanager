@@ -241,14 +241,17 @@ O workflow utiliza um segundo AI Agent com **Structured Output Parser** para ext
 
 ---
 
-## Link para Teste
+## 🌐 Links para Teste
 
-**Chat Online:** [Abra o arquivo test-chat.html no navegador]
-**Webhook URL:** `https://nexttech-n8n-nexthub.haas2a.easypanel.host/webhook/marmitaria-chat`
+**🚀 Chat Online:** https://teste-logmanager.vercel.app/test/test-chat.html
 
-## Prints do Workflow
+**📦 Repositório GitHub:** https://github.com/ZeFelipePF/teste_logmanager
 
-Os prints do fluxo N8N estão disponíveis na pasta `prints/` (a ser criada antes do envio).
+**🔗 Webhook N8N:** `https://nexttech-n8n-nexthub.haas2a.easypanel.host/webhook/marmitaria-chat`
+
+## 📸 Prints do Workflow
+
+Os prints do fluxo N8N estão disponíveis na pasta [test/prints/](test/prints/).
 
 ---
 

@@ -1,13 +1,17 @@
 # Instruções de Teste - Marmitaria Sabor Caseiro
 
-## Acesso Rápido ao Chat
+## 🌐 Acesso Online ao Chat
+
+**Link direto para teste:** https://teste-logmanager.vercel.app/test/test-chat.html
+
+### Alternativa: Acesso Local
 
 1. Abra o arquivo `test/test-chat.html` em qualquer navegador moderno (Chrome, Firefox, Edge, Safari)
 2. O chat iniciará automaticamente com a mensagem de boas-vindas
 3. Digite seu nome quando solicitado
 4. Comece a fazer seu pedido!
 
-## URL do Webhook
+## URL do Webhook N8N
 
 ```
 https://nexttech-n8n-nexthub.haas2a.easypanel.host/webhook/marmitaria-chat
