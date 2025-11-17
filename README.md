@@ -239,7 +239,7 @@ O workflow utiliza um segundo AI Agent com **Structured Output Parser** para ext
 ## Contato
 
 **Desenvolvido por:** José Felipe
-**Email:** [Seu email]
+**Email:** jose.fpfaria@gmail.com
 **Data:** Novembro/2025
 **Desafio:** LogManager - Engenheiro de IA
 
